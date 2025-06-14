@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EstoqueAgil")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+779dec201f37a83dc4788827d22dbc4f2e2da3b7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a5ff4b1f8741ace27a4952b927a42df6860d7c14")]
 [assembly: System.Reflection.AssemblyProductAttribute("EstoqueAgil")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EstoqueAgil")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

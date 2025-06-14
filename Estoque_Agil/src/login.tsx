@@ -29,7 +29,7 @@ export default function Login() {
       console.log(localStorage.getItem("nome"));
      
       alert("Login realizado!");
-
+      window.location.href = "/ListarProduto"
     } catch (err) {
       console.error("Erro:", err);
       setErro("E-mail ou senha inválidos");
