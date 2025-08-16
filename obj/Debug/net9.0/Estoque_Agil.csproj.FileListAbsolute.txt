@@ -163,3 +163,4 @@ C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\n
 C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\obj\Debug\net9.0\Estoque_Agil.sourcelink.json
