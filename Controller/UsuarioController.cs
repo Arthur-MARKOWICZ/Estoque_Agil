@@ -39,9 +39,22 @@ public class UsuarioController : ControllerBase
     [AllowAnonymous]
     public IActionResult Login([FromBody] UsuarioLoginDto dto)
     {
-
         string token = _usuarioService.login(dto);
         return Ok(new UsuarioLoginRespostaDTO(token));
+    }
+    [HttpPatch("atualizar-dados/{id}")]
+    [Authorize]
+    public IActionResult AtualizarDadosUsuario(int id, [FromBody] UsuarioAtualizarDTo dTo)
+    {
+        Usuario usuario = _usuarioService.atualizarDadosUsuario(dTo, id);
+        return Ok(usuario);
+    }
+    [HttpDelete("deletar-usuario/{id}")]
+    [Authorize]
+    public IActionResult deletearUsuario(int id)
+    {
+        Usuario usuario = _usuarioService.deletarUsuario(id);
+        return Ok(usuario);
     }
 
 }

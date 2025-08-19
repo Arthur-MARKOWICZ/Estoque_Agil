@@ -14,13 +14,13 @@ namespace EstoqueAgil.Service;
 public class UsuarioService
 {
     private readonly PasswordHasher<Usuario> passwordHasher = new PasswordHasher<Usuario>();
-     private readonly IConfiguration _configuration;
+    private readonly IConfiguration _configuration;
     private readonly EstoqueAgilDbContext _context;
     public UsuarioService(EstoqueAgilDbContext context, IConfiguration configuration)
     {
         _context = context;
         _configuration = configuration;
-       
+
     }
     public Usuario cadastro(UsuarioCadastroDTo dTo)
     {
@@ -47,6 +47,9 @@ public class UsuarioService
         {
             throw new UsuarioNaoEncontrado("senha ou email incorretos");
         }
+        if(!usuario.Ativo){
+            throw new UsuarioNaoAtivo("usuario foi desativado");
+        }
         var passwordHasher = new PasswordHasher<Usuario>();
         var resultado = passwordHasher.VerifyHashedPassword(usuario, usuario.Senha, dto.Senha);
         if (resultado != PasswordVerificationResult.Success)
@@ -68,5 +71,23 @@ public class UsuarioService
         string jwt = tokenHandler.WriteToken(token);
         return jwt;
     }
-
-}
+    public Usuario atualizarDadosUsuario(UsuarioAtualizarDTo dTO, int id)
+    {
+        Usuario usuario = _context.Usuario.Find(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
+        usuario.AtualizarUsuario(dTO);
+        if (!string.IsNullOrEmpty(dTO.Senha))
+        {
+            string hash = passwordHasher.HashPassword(usuario, dTO.Senha);
+            usuario.Senha = hash;
+        }
+        _context.SaveChanges();
+        return usuario;
+    }
+    public Usuario deletarUsuario(int id)
+    {
+        Usuario usuario = _context.Usuario.Find(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
+        usuario.Ativo = false;
+        _context.SaveChanges();
+        return usuario;
+    }
+ }

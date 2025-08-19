@@ -1,3 +1,4 @@
+using EstoqueAgil.DTOs;
 namespace EstoqueAgil.model;
 
 public class Usuario
@@ -13,4 +14,10 @@ public class Usuario
     public string Senha { get; set; }
     public string Nome { get; set; }
 
+    public bool Ativo { get; set; } = true;
+    public void AtualizarUsuario(UsuarioAtualizarDTo dTO)
+    {
+        Email = dTO.Email;
+        Nome = dTO.Nome;
+    }
 }
