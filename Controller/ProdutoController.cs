@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using EstoqueAgil.model;
 using EstoqueAgil.DTOs;
 namespace EstoqueAgil.Controller;
+
 [ApiController]
 [Route("api/Produto")]
 public class ProdutoController : ControllerBase
@@ -15,7 +16,7 @@ public class ProdutoController : ControllerBase
     }
     [HttpPost("cadastro")]
     [Authorize]
-    public IActionResult cadastro([FromBody]ProdutoCadastroDTO dTO)
+    public IActionResult cadastro([FromBody] ProdutoCadastroDTO dTO)
     {
         Produto produto = _service.Cadastro(dTO);
         return CreatedAtAction(
@@ -26,8 +27,31 @@ public class ProdutoController : ControllerBase
     }
     [HttpGet("{id}")]
     [Authorize]
-    public IActionResult obterProdutoPorId(int id) {
+    public IActionResult obterProdutoPorId(int id)
+    {
         Produto produto = _service.ObterProdutoPorId(id);
         return Ok(produto);
+    }
+    [HttpPatch("atualizar/{id}")]
+    [Authorize]
+    public IActionResult atualizarProduto([FromBody] ProdutoCadastroDTO dTO, int id)
+    {
+        Produto produto = _service.AlterarDadosProduto(dTO, id);
+        return Ok(produto);
+    }
+    [HttpDelete("deletar-produto/{id}")]
+    [Authorize]
+    public IActionResult deletar(int id)
+    {
+        _service.deletarProduto(id);
+        return NoContent();
+    }
+    [HttpGet("pegarTodos")]
+    [Authorize]
+    public IActionResult pegarTodos()
+    {
+        var produto = _service.pegarTodosProdutos(0);
+        return Ok(produto);
+
     }
 }
