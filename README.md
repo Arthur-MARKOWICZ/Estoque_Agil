@@ -10,6 +10,7 @@ Entity Framework Core
 
 MySQL(via docker)
 
+Documentação com Swagger/OpenAPI
 ## Funcionalidades (em andamento)
 ### Produto
 Cadastro de produtos
