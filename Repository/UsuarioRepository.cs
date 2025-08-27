@@ -11,15 +11,17 @@ namespace EstoqueAgil.Repository
         public UsuarioRepository(EstoqueAgilDbContext context)
         {
             _context = context;
+            
         }
-        public async Usuario pegarUsuarioPorId(int id)
+        public async Task<Usuario?> pegarUsuarioPorId(int id)
         {
-            return await _context.USuario.FindAsync(id);
+            return await _context.Usuario.FindAsync(id);
         }
-        public async Usuario SalvarUsuario(Usuario usuario)
+        public async Task<Usuario> salvarUsuario(Usuario usuario)
         {
             _context.Usuario.Add(usuario);
             _context.SaveChanges();
+            return usuario;
         }
 
     }

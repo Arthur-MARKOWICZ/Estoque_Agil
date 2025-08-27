@@ -164,3 +164,7 @@ C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\n
 C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\obj\Debug\net9.0\Estoque_Agil.sourcelink.json
+C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\xunit.abstractions.dll
+C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\xunit.assert.dll
+C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\xunit.core.dll
+C:\Users\arthu\Documents\projetos pessoais\Estoque_Agil\Estoque_Agil\bin\Debug\net9.0\xunit.execution.dotnet.dll

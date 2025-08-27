@@ -7,8 +7,8 @@ namespace EstoqueAgil.Repository
 {
     public interface IUsuarioRepository
     {
-        Usuario? pegarUsuarioPorId(int id);
-        Usuario salvarUsuario(Usuario usuario);
+        Task<Usuario?> pegarUsuarioPorId(int id);
+        Task<Usuario> salvarUsuario(Usuario usuario);
 
     }
 }

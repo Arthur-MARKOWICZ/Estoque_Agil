@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
+using EstoqueAgil.Repository;
 namespace EstoqueAgil.Service;
 
 public class UsuarioService
@@ -16,10 +17,12 @@ public class UsuarioService
     private readonly PasswordHasher<Usuario> passwordHasher = new PasswordHasher<Usuario>();
     private readonly IConfiguration _configuration;
     private readonly EstoqueAgilDbContext _context;
-    public UsuarioService(EstoqueAgilDbContext context, IConfiguration configuration)
+    private readonly IUsuarioRepository _repository;
+    public UsuarioService(EstoqueAgilDbContext context, IConfiguration configuration, IUsuarioRepository repository)
     {
         _context = context;
         _configuration = configuration;
+        _repository = repository;
 
     }
     public Usuario cadastro(UsuarioCadastroDTo dTo)
@@ -27,13 +30,12 @@ public class UsuarioService
         Usuario usuario = new Usuario(dTo.Email, dTo.Senha, dTo.Nome);
         string hash = passwordHasher.HashPassword(usuario, dTo.Senha);
         usuario.Senha = hash;
-        _context.Usuario.Add(usuario);
-        _context.SaveChanges();
+        _repository.salvarUsuario(usuario);
         return usuario;
     }
-    public Usuario ObterPorId(int Id)
+    public async Task<Usuario> ObterPorId(int Id)
     {
-        Usuario usuario = _context.Usuario.Find(Id);
+        Usuario usuario = await _repository.pegarUsuarioPorId(Id);
         if (usuario == null)
         {
             throw new UsuarioNaoEncontrado("Usuário não encontrado");
