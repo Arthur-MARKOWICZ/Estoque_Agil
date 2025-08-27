@@ -27,9 +27,9 @@ public class UsuarioController : ControllerBase
     }
     [HttpGet("{id}")]
     [Authorize]
-    public IActionResult ObterUsuarioPorId(int id)
+    public  async Task<IActionResult> ObterUsuarioPorId(int id)
     {
-        var usuario = _usuarioService.ObterPorId(id);
+        var usuario = await _usuarioService.ObterPorId(id);
         if (usuario == null)
             return NotFound();
 
