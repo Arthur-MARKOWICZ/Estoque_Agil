@@ -9,6 +9,7 @@ namespace EstoqueAgil.Repository
     {
         Task<Usuario?> pegarUsuarioPorId(int id);
         Task<Usuario> salvarUsuario(Usuario usuario);
-
+        Task<Usuario> pegarPorEmail(string email);
+        Task salvarAlteracao();
     }
 }

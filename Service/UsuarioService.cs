@@ -16,11 +16,11 @@ public class UsuarioService
 {
     private readonly PasswordHasher<Usuario> passwordHasher = new PasswordHasher<Usuario>();
     private readonly IConfiguration _configuration;
-    private readonly EstoqueAgilDbContext _context;
+
     private readonly IUsuarioRepository _repository;
-    public UsuarioService(EstoqueAgilDbContext context, IConfiguration configuration, IUsuarioRepository repository)
+    public UsuarioService( IConfiguration configuration, IUsuarioRepository repository)
     {
-        _context = context;
+
         _configuration = configuration;
         _repository = repository;
 
@@ -42,9 +42,9 @@ public class UsuarioService
         }
         return usuario;
     }
-    public string login(UsuarioLoginDto dto)
+    public async Task<string> login(UsuarioLoginDto dto)
     {
-        Usuario usuario = _context.Usuario.FirstOrDefault(u => u.Email == dto.Email);
+        Usuario usuario = await _repository.pegarPorEmail(dto.Email);
         if (usuario == null)
         {
             throw new UsuarioNaoEncontrado("senha ou email incorretos");
@@ -73,23 +73,23 @@ public class UsuarioService
         string jwt = tokenHandler.WriteToken(token);
         return jwt;
     }
-    public Usuario atualizarDadosUsuario(UsuarioAtualizarDTo dTO, int id)
+    public async Task<Usuario> atualizarDadosUsuario(UsuarioAtualizarDTo dTO, int id)
     {
-        Usuario usuario = _context.Usuario.Find(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
+        Usuario usuario = await _repository.pegarUsuarioPorId(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
         usuario.AtualizarUsuario(dTO);
         if (!string.IsNullOrEmpty(dTO.Senha))
         {
             string hash = passwordHasher.HashPassword(usuario, dTO.Senha);
             usuario.Senha = hash;
         }
-        _context.SaveChanges();
+        _repository.salvarAlteracao();
         return usuario;
     }
-    public Usuario deletarUsuario(int id)
+    public async Task<Usuario> deletarUsuario(int id)
     {
-        Usuario usuario = _context.Usuario.Find(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
+        Usuario usuario = await _repository.pegarUsuarioPorId(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
         usuario.Ativo = false;
-        _context.SaveChanges();
+        _repository.salvarAlteracao();
         return usuario;
     }
  }

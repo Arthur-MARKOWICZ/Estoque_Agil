@@ -37,23 +37,23 @@ public class UsuarioController : ControllerBase
     }
     [HttpPost("login")]
     [AllowAnonymous]
-    public IActionResult Login([FromBody] UsuarioLoginDto dto)
+    public async Task<IActionResult> Login([FromBody] UsuarioLoginDto dto)
     {
-        string token = _usuarioService.login(dto);
+        string token = await _usuarioService.login(dto);
         return Ok(new UsuarioLoginRespostaDTO(token));
     }
     [HttpPatch("atualizar-dados/{id}")]
     [Authorize]
-    public IActionResult AtualizarDadosUsuario(int id, [FromBody] UsuarioAtualizarDTo dTo)
+    public async Task<IActionResult> AtualizarDadosUsuario(int id, [FromBody] UsuarioAtualizarDTo dTo)
     {
-        Usuario usuario = _usuarioService.atualizarDadosUsuario(dTo, id);
+        Usuario usuario = await _usuarioService.atualizarDadosUsuario(dTo, id);
         return Ok(usuario);
     }
     [HttpDelete("deletar-usuario/{id}")]
     [Authorize]
-    public IActionResult deletearUsuario(int id)
+    public async Task<IActionResult> deletearUsuario(int id)
     {
-        Usuario usuario = _usuarioService.deletarUsuario(id);
+        Usuario usuario = await _usuarioService.deletarUsuario(id);
         return Ok(usuario);
     }
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 using EstoqueAgil.model;
 namespace EstoqueAgil.Repository
 {
@@ -11,7 +13,7 @@ namespace EstoqueAgil.Repository
         public UsuarioRepository(EstoqueAgilDbContext context)
         {
             _context = context;
-            
+
         }
         public async Task<Usuario?> pegarUsuarioPorId(int id)
         {
@@ -23,6 +25,17 @@ namespace EstoqueAgil.Repository
             _context.SaveChanges();
             return usuario;
         }
+
+        public async Task<Usuario> pegarPorEmail(string email)
+        {
+            Usuario usuario = await _context.Usuario.FirstOrDefaultAsync(u => u.Email == email);
+            return usuario;
+        }
+        public async Task salvarAlteracao()
+        {
+            await _context.SaveChangesAsync();
+        }
+
 
     }
 }
