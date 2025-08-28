@@ -8,8 +8,10 @@ namespace EstoqueAgil.Repository
 {
     public interface IProdutoRepository
     {
-        Task<Produto> PegarProdutoPorId(int id);
-        Task<Produto> SalvarProduto(ProdutoCAdastroDTO dTO);
+        Task<Produto> PegarPorId(int id);
+        Task<Produto> SalvarProduto(Produto produto);
         Task SalvarAlteracao();
+        Task<PageResult<Produto>> pegarTodosProdutos(int page, int pageSize = 10);
+        void  DeletarProduto(Produto produto);
     }
 }

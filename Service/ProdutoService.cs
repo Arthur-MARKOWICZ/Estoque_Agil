@@ -1,74 +1,57 @@
 using EstoqueAgil.model;
 using EstoqueAgil.Execao;
 using EstoqueAgil.DTOs;
+using EstoqueAgil.Repository;
 namespace EstoqueAgil.Service;
 
 public class ProdutoService
 {
-    private readonly EstoqueAgilDbContext _context;
-    public ProdutoService(EstoqueAgilDbContext context)
+    private readonly IProdutoRepository _context;
+    public ProdutoService(IProdutoRepository context)
     {
         _context = context;
     }
-    public Produto ObterProdutoPorId(int Id)
+    public async Task<Produto> ObterProdutoPorId(int Id)
     {
-        Produto produto = _context.Produto.Find(Id);
+        Produto produto =  await _context.PegarPorId(Id);
         if (produto == null)
         {
             throw new ProdutoNaoEncontrado("Produto nao encontrado");
         }
         return produto;
     }
-    
-    public PageResult<Produto> pegarTodosProdutos(int page, int pageSize = 10)
-{
-    if (page < 1) page = 1;
-    if (pageSize < 1) pageSize = 10; 
 
-    var query = _context.Produto.AsQueryable();
-
-    var totalItems = query.Count();
-    var items = query.Skip((page - 1) * pageSize)
-                     .Take(pageSize)
-                     .ToList();
-
-    return new PageResult<Produto>
+    public async Task<PageResult<Produto>> pegarTodosProdutos(int page, int pageSize = 10)
     {
-        Page = page,
-        PageSize = pageSize,
-        TotalItems = totalItems,
-        TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize),
-        Items = items
-    };
+        PageResult<Produto> pageResult =await _context.pegarTodosProdutos(page, pageSize);
+        return pageResult;
 }
 
-    public Produto Cadastro(ProdutoCadastroDTO dTO)
+    public async Task<Produto> Cadastro(ProdutoCadastroDTO dTO)
     {
         Produto produto = new Produto(dTO.Nome);
-        _context.Produto.Add(produto);
-        _context.SaveChanges();
+         await _context.SalvarProduto(produto);
         return produto;
     }
-    public Produto AlterarDadosProduto(ProdutoCadastroDTO dTO, int id)
+    public async Task<Produto> AlterarDadosProduto(ProdutoCadastroDTO dTO, int id)
     {
-        Produto produto = _context.Produto.Find(id); ;
+        Produto produto = await _context.PegarPorId(id);
         if (produto == null)
         {
             throw new ProdutoNaoEncontrado("Produto nao encontrado");
         }
         produto.Nome = dTO.Nome;
-        _context.SaveChanges();
+        await _context.SalvarAlteracao();
         return produto;
     }
-    public Produto deletarProduto(int id)
+    public async Task<Produto> deletarProduto(int id)
     {
-        Produto produto = _context.Produto.Find(id); ;
+        Produto produto = await _context.PegarPorId(id);
         if (produto == null)
         {
             throw new ProdutoNaoEncontrado("Produto nao encontrado");
         }
-        _context.Produto.Remove(produto);
-        _context.SaveChanges();
+        _context.DeletarProduto(produto);
         return produto;
     }
 }

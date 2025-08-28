@@ -16,9 +16,9 @@ public class ProdutoController : ControllerBase
     }
     [HttpPost("cadastro")]
     [Authorize]
-    public IActionResult cadastro([FromBody] ProdutoCadastroDTO dTO)
+    public async Task<IActionResult> cadastro([FromBody] ProdutoCadastroDTO dTO)
     {
-        Produto produto = _service.Cadastro(dTO);
+        Produto produto = await _service.Cadastro(dTO);
         return CreatedAtAction(
             nameof(obterProdutoPorId),
             new { id = produto.Id },
@@ -27,16 +27,16 @@ public class ProdutoController : ControllerBase
     }
     [HttpGet("{id}")]
     [Authorize]
-    public IActionResult obterProdutoPorId(int id)
+    public async Task<IActionResult> obterProdutoPorId(int id)
     {
-        Produto produto = _service.ObterProdutoPorId(id);
+        Produto produto = await _service.ObterProdutoPorId(id);
         return Ok(produto);
     }
     [HttpPatch("atualizar/{id}")]
     [Authorize]
-    public IActionResult atualizarProduto([FromBody] ProdutoCadastroDTO dTO, int id)
+    public async Task<IActionResult> atualizarProduto([FromBody] ProdutoCadastroDTO dTO, int id)
     {
-        Produto produto = _service.AlterarDadosProduto(dTO, id);
+        Produto produto = await _service.AlterarDadosProduto(dTO, id);
         return Ok(produto);
     }
     [HttpDelete("deletar-produto/{id}")]
@@ -48,9 +48,9 @@ public class ProdutoController : ControllerBase
     }
     [HttpGet("pegarTodos")]
     [Authorize]
-    public IActionResult pegarTodos()
+    public async Task<IActionResult> pegarTodos()
     {
-        var produto = _service.pegarTodosProdutos(0);
+        var produto = await _service.pegarTodosProdutos(0);
         return Ok(produto);
 
     }
