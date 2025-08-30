@@ -11,6 +11,24 @@ Entity Framework Core
 MySQL(via docker)
 
 Documentação com Swagger/OpenAPI
+## Diagrama de Banco de Dados
+```mermaid
+erDiagram
+    Usuario {
+        int Id PK
+        string Email
+        string Senha
+        string Nome
+    }
+
+    Produto {
+        int Id PK
+        string nome
+        int UsuarioId FK
+    }
+
+    Usuario ||--o{ Produto : possui
+```
 ## Funcionalidades (em andamento)
 ### Produto
 Cadastro de produtos
