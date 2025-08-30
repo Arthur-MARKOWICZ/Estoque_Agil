@@ -9,17 +9,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
+using EstoqueAgil.Repository;
 namespace EstoqueAgil.Service;
 
 public class UsuarioService
 {
     private readonly PasswordHasher<Usuario> passwordHasher = new PasswordHasher<Usuario>();
     private readonly IConfiguration _configuration;
-    private readonly EstoqueAgilDbContext _context;
-    public UsuarioService(EstoqueAgilDbContext context, IConfiguration configuration)
+
+    private readonly IUsuarioRepository _repository;
+    public UsuarioService( IConfiguration configuration, IUsuarioRepository repository)
     {
-        _context = context;
+
         _configuration = configuration;
+        _repository = repository;
 
     }
     public Usuario cadastro(UsuarioCadastroDTo dTo)
@@ -27,22 +30,21 @@ public class UsuarioService
         Usuario usuario = new Usuario(dTo.Email, dTo.Senha, dTo.Nome);
         string hash = passwordHasher.HashPassword(usuario, dTo.Senha);
         usuario.Senha = hash;
-        _context.Usuario.Add(usuario);
-        _context.SaveChanges();
+        _repository.salvarUsuario(usuario);
         return usuario;
     }
-    public Usuario ObterPorId(int Id)
+    public async Task<Usuario> ObterPorId(int Id)
     {
-        Usuario usuario = _context.Usuario.Find(Id);
+        Usuario usuario = await _repository.pegarUsuarioPorId(Id);
         if (usuario == null)
         {
             throw new UsuarioNaoEncontrado("Usuário não encontrado");
         }
         return usuario;
     }
-    public string login(UsuarioLoginDto dto)
+    public async Task<string> login(UsuarioLoginDto dto)
     {
-        Usuario usuario = _context.Usuario.FirstOrDefault(u => u.Email == dto.Email);
+        Usuario usuario = await _repository.pegarPorEmail(dto.Email);
         if (usuario == null)
         {
             throw new UsuarioNaoEncontrado("senha ou email incorretos");
@@ -62,7 +64,7 @@ public class UsuarioService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, usuario.Email) }),
+            Subject = new ClaimsIdentity(new[] { new Claim( ClaimTypes.NameIdentifier, usuario.Id.ToString(),  usuario.Email) }),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
@@ -71,23 +73,23 @@ public class UsuarioService
         string jwt = tokenHandler.WriteToken(token);
         return jwt;
     }
-    public Usuario atualizarDadosUsuario(UsuarioAtualizarDTo dTO, int id)
+    public async Task<Usuario> atualizarDadosUsuario(UsuarioAtualizarDTo dTO, int id)
     {
-        Usuario usuario = _context.Usuario.Find(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
+        Usuario usuario = await _repository.pegarUsuarioPorId(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
         usuario.AtualizarUsuario(dTO);
         if (!string.IsNullOrEmpty(dTO.Senha))
         {
             string hash = passwordHasher.HashPassword(usuario, dTO.Senha);
             usuario.Senha = hash;
         }
-        _context.SaveChanges();
+        _repository.salvarAlteracao();
         return usuario;
     }
-    public Usuario deletarUsuario(int id)
+    public async Task<Usuario> deletarUsuario(int id)
     {
-        Usuario usuario = _context.Usuario.Find(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
+        Usuario usuario = await _repository.pegarUsuarioPorId(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
         usuario.Ativo = false;
-        _context.SaveChanges();
+        _repository.salvarAlteracao();
         return usuario;
     }
  }
