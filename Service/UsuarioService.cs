@@ -25,9 +25,9 @@ public class UsuarioService
         _repository = repository;
 
     }
-    public Usuario cadastro(UsuarioCadastroDTo dTo)
+    public Usuario Cadastro(UsuarioCadastroDTo dTo)
     {
-        Usuario usuario = new Usuario(dTo.Email, dTo.Senha, dTo.Nome);
+        Usuario usuario = new Usuario(dTo.Email, dTo.Nome, dTo.Senha);
         string hash = passwordHasher.HashPassword(usuario, dTo.Senha);
         usuario.Senha = hash;
         _repository.salvarUsuario(usuario);
@@ -77,6 +77,7 @@ public class UsuarioService
     {
         Usuario usuario = await _repository.pegarUsuarioPorId(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
         usuario.AtualizarUsuario(dTO);
+        
         if (!string.IsNullOrEmpty(dTO.Senha))
         {
             string hash = passwordHasher.HashPassword(usuario, dTO.Senha);

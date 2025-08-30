@@ -16,9 +16,9 @@ public class UsuarioController : ControllerBase
     }
     [HttpPost("cadastro")]
     [AllowAnonymous]
-    public IActionResult CriarProduto([FromBody] UsuarioCadastroDTo usuarioCadastroDTO)
+    public IActionResult CriarUsuario([FromBody] UsuarioCadastroDTo usuarioCadastroDTO)
     {
-        Usuario usuario = _usuarioService.cadastro(usuarioCadastroDTO);
+        Usuario usuario = _usuarioService.Cadastro(usuarioCadastroDTO);
         return CreatedAtAction(
         nameof(ObterUsuarioPorId),
         new { id = usuario.Id },
