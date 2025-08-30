@@ -64,7 +64,7 @@ public class UsuarioService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, usuario.Email) }),
+            Subject = new ClaimsIdentity(new[] { new Claim( ClaimTypes.NameIdentifier, usuario.Id.ToString(),  usuario.Email) }),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };

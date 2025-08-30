@@ -2,14 +2,21 @@ using EstoqueAgil.model;
 using EstoqueAgil.Execao;
 using EstoqueAgil.DTOs;
 using EstoqueAgil.Repository;
+using System.IdentityModel.Tokens.Jwt; 
+using System.Security.Claims;          
+using System.Text;                       
+using Microsoft.IdentityModel.Tokens; 
 namespace EstoqueAgil.Service;
 
 public class ProdutoService
 {
-    private readonly IProdutoRepository _context;
-    public ProdutoService(IProdutoRepository context)
+    private readonly IProdutoRepository _context;   
+     private readonly IHttpContextAccessor _httpContextAccessor;
+    public ProdutoService(IProdutoRepository context, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
+
     }
     public async Task<Produto> ObterProdutoPorId(int Id)
     {
@@ -29,7 +36,16 @@ public class ProdutoService
 
     public async Task<Produto> Cadastro(ProdutoCadastroDTO dTO)
     {
-        Produto produto = new Produto(dTO.Nome);
+          var userId = _httpContextAccessor.HttpContext?.User
+            ?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+            throw new UnauthorizedAccessException("Usuário não autenticado.");
+
+        Produto produto = new Produto(dTO.Nome)
+        {
+            UsuarioId = int.Parse(userId) 
+        };
          await _context.SalvarProduto(produto);
         return produto;
     }
