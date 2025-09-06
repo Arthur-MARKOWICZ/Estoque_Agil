@@ -1,3 +1,4 @@
+
 namespace EstoqueAgil.model;
 
 public class PageResult<T>

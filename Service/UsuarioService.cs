@@ -64,7 +64,8 @@ public class UsuarioService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim( ClaimTypes.NameIdentifier, usuario.Id.ToString(),  usuario.Email) }),
+            Subject = new ClaimsIdentity(new[] { new Claim( ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+            new Claim(ClaimTypes.Email, usuario.Email) }),
             Expires = DateTime.UtcNow.AddHours(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
@@ -83,14 +84,14 @@ public class UsuarioService
             string hash = passwordHasher.HashPassword(usuario, dTO.Senha);
             usuario.Senha = hash;
         }
-        _repository.salvarAlteracao();
+        await _repository.salvarAlteracao();
         return usuario;
     }
     public async Task<Usuario> deletarUsuario(int id)
     {
         Usuario usuario = await _repository.pegarUsuarioPorId(id) ?? throw new UsuarioNaoEncontrado("usuario nao encontrado");
         usuario.Ativo = false;
-        _repository.salvarAlteracao();
+        await _repository.salvarAlteracao();
         return usuario;
     }
  }
