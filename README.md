@@ -110,7 +110,7 @@ dotnet restore
 
 Isso irá baixar todas as bibliotecas e pacotes necessários para compilar a aplicação.
 
-###3️⃣ Configurar e atualizar o banco de dados
+### 3️⃣ Configurar e atualizar o banco de dados
 
 O projeto utiliza MySQL, que pode ser executado via Docker ou localmente.
 Depois de configurar o banco, rode:
@@ -120,7 +120,7 @@ dotnet ef database update
 ```
 Isso aplicará todas as migrations e criará as tabelas necessárias.
 
-###4️⃣ Executar a API
+### 4️⃣ Executar a API
 
 Para iniciar a API, execute:
 ```bash
@@ -134,7 +134,7 @@ https://localhost:5165/swagger
 
 Abra este link no navegador para acessar a documentação interativa via Swagger, onde você pode testar todos os endpoints.
 
-###5️⃣ Executar testes automatizados
+### 5️⃣ Executar testes automatizados
 
 O projeto possui testes planejados para unidade e integração. Para executá-los:
 ```bash
